@@ -31,26 +31,60 @@ const featuredGames = [
 ];
 
 // Mock data for featured reviews
-const featuredReviews = [
+const reviewedGames = [
   {
     id: 1,
-    gameId: 1,
-    gameTitle: "Catan",
-    reviewer: "BoardGamePro",
-    reviewerAvatar: "/images/avatars/reviewer1.jpg",
-    date: "2023-11-15",
+    title: "Catan",
+    coverImage: "/images/catan.jpg",
+    reviewDate: "2023-11-15",
     score: 4.5,
-    snippet: "Excellent replay value with a perfect balance of luck and strategy."
+    reviewCount: 128,
+    shortDescription: "A classic strategy game of resource management and trading."
   },
   {
     id: 2,
-    gameId: 2,
-    gameTitle: "Pandemic",
-    reviewer: "TabletopTester",
-    reviewerAvatar: "/images/avatars/reviewer2.jpg",
-    date: "2023-12-03",
+    title: "Pandemic",
+    coverImage: "/images/pandemic.jpg",
+    reviewDate: "2023-12-03",
     score: 4.8,
-    snippet: "The cooperative mechanics create a truly engaging experience for all players."
+    reviewCount: 94,
+    shortDescription: "Work together to stop the spread of diseases and save humanity."
+  },
+  {
+    id: 3,
+    title: "Ticket to Ride",
+    coverImage: "/images/ticket-to-ride.jpg",
+    reviewDate: "2023-10-22",
+    score: 4.3,
+    reviewCount: 112,
+    shortDescription: "Connect cities with train routes across the country."
+  },
+  {
+    id: 4,
+    title: "Azul",
+    coverImage: "/images/azul.jpg",
+    reviewDate: "2024-01-05",
+    score: 4.6,
+    reviewCount: 87,
+    shortDescription: "Compete to create the most beautiful mosaic pattern."
+  },
+  {
+    id: 5,
+    title: "Wingspan",
+    coverImage: "/images/wingspan.jpg",
+    reviewDate: "2024-02-18",
+    score: 4.7,
+    reviewCount: 76,
+    shortDescription: "Build your nature preserve by attracting birds with unique abilities."
+  },
+  {
+    id: 6,
+    title: "7 Wonders",
+    coverImage: "/images/7wonders.jpg",
+    reviewDate: "2023-09-30",
+    score: 4.4,
+    reviewCount: 103,
+    shortDescription: "Build your ancient civilization through three ages of development."
   }
 ];
 
@@ -231,38 +265,31 @@ export default function HomePage() {
 
       {/* Featured Reviews */}
       <section className="py-12 px-4 md:px-8 lg:px-12">
-        <h2 className="text-3xl font-bold mb-8 text-center">Featured Reviews</h2>
+        <h2 className="text-3xl font-bold mb-8 text-center">Reviewed Board Games</h2>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {featuredReviews.map(review => (
-            <div key={review.id} className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow">
-              <div className="p-6">
-                <div className="flex items-center mb-4">
-                  <div className="w-12 h-12 rounded-full bg-gray-300 mr-4 overflow-hidden">
-                    {/* Placeholder for reviewer avatar */}
-                    <div className="w-full h-full bg-gradient-to-br from-blue-400 to-purple-500"></div>
-                  </div>
-                  <div>
-                    <h3 className="font-bold">{review.gameTitle}</h3>
-                    <p className="text-sm text-gray-600">Reviewed by {review.reviewer}</p>
-                  </div>
-                  <div className="ml-auto">
-                    <RatingBadge 
-                      rating={review.score} 
-                      size="small" 
-                    />
-                  </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {reviewedGames.map(game => (
+            <div key={game.id} className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-all hover:-translate-y-1">
+              <div className="h-48 bg-gray-200 relative">
+                {/* Placeholder for game image */}
+                <div className="w-full h-full bg-gradient-to-br from-blue-400 to-purple-500"></div>
+                <div className="absolute top-2 right-2">
+                  <RatingBadge 
+                    rating={game.score} 
+                    size="small" 
+                  />
                 </div>
-                
-                <p className="text-gray-700 mb-4">"{review.snippet}"</p>
-                
+              </div>
+              <div className="p-5">
+                <h3 className="font-bold text-lg mb-1">{game.title}</h3>
+                <p className="text-gray-700 text-sm mb-3">{game.shortDescription}</p>
                 <div className="flex justify-between items-center">
-                  <span className="text-sm text-gray-500">{review.date}</span>
+                  <span className="text-xs text-gray-500">{game.reviewCount} reviews</span>
                   <Link
-                    href={`/reviews/${review.id}`}
-                    className="text-blue-600 hover:text-blue-800 font-medium"
+                    href={`/games/${game.id}`}
+                    className="text-blue-600 hover:text-blue-800 font-medium text-sm"
                   >
-                    Read More
+                    See Details
                   </Link>
                 </div>
               </div>
@@ -272,10 +299,10 @@ export default function HomePage() {
         
         <div className="text-center mt-10">
           <Link
-            href="/reviews"
+            href="/games"
             className="inline-flex items-center bg-gray-200 text-gray-800 py-3 px-6 rounded-full hover:bg-gray-300 transition-colors"
           >
-            View All Reviews
+            Browse All Games
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" className="w-5 h-5 ml-2">
               <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
             </svg>
