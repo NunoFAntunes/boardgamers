@@ -1,0 +1,190 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model BoardGame {
+  id             Int        @id @default(autoincrement())
+  title          String
+  publisher      String
+  releaseYear    Int
+  description    String     @db.Text
+  imageUrl       String?
+  minPlayers     Int
+  maxPlayers     Int
+  minPlaytime    Int
+  maxPlaytime    Int
+  minAge         Int
+  complexityRating Float
+  isFeatured     Boolean    @default(false)
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
+
+  // Relations
+  reviews        Review[]
+  categories     GameCategory[]
+  mechanics      GameMechanic[]
+  userCollections UserCollection[]
+  tags           GameTag[]
+
+  @@index([title])
+  @@index([minPlayers, maxPlayers])
+  @@index([minPlaytime, maxPlaytime])
+}
+
+model Reviewer {
+  id        Int       @id @default(autoincrement())
+  name      String
+  email     String    @unique
+  bio       String?   @db.Text
+  avatarUrl String?
+  role      String
+  joinedAt  DateTime  @default(now())
+
+  // Relations
+  reviewScores ReviewScore[]
+}
+
+model Category {
+  id          Int           @id @default(autoincrement())
+  name        String        @unique
+  description String?       @db.Text
+  icon        String?
+
+  // Relations
+  games       GameCategory[]
+}
+
+model GameCategory {
+  game       BoardGame @relation(fields: [gameId], references: [id], onDelete: Cascade)
+  gameId     Int
+  category   Category  @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  categoryId Int
+
+  @@id([gameId, categoryId])
+  @@index([categoryId])
+}
+
+model Mechanic {
+  id          Int           @id @default(autoincrement())
+  name        String        @unique
+  description String?       @db.Text
+
+  // Relations
+  games       GameMechanic[]
+}
+
+model GameMechanic {
+  game       BoardGame @relation(fields: [gameId], references: [id], onDelete: Cascade)
+  gameId     Int
+  mechanic   Mechanic  @relation(fields: [mechanicId], references: [id], onDelete: Cascade)
+  mechanicId Int
+
+  @@id([gameId, mechanicId])
+  @@index([mechanicId])
+}
+
+model Review {
+  id        Int      @id @default(autoincrement())
+  game      BoardGame @relation(fields: [gameId], references: [id], onDelete: Cascade)
+  gameId    Int
+  playDate  DateTime
+  content   String?  @db.Text
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  reviewScores ReviewScore[]
+  comments     Comment[]
+
+  @@index([gameId])
+}
+
+model ReviewScore {
+  id             Int      @id @default(autoincrement())
+  review         Review   @relation(fields: [reviewId], references: [id], onDelete: Cascade)
+  reviewId       Int
+  reviewer       Reviewer @relation(fields: [reviewerId], references: [id], onDelete: Cascade)
+  reviewerId     Int
+  overallScore   Float
+  funScore       Float
+  easeToLearn    Float
+  themingArtwork Float
+  replayability  Float
+  justification  String?  @db.Text
+
+  @@index([reviewId])
+  @@index([reviewerId])
+  @@index([overallScore])
+}
+
+model User {
+  id            Int       @id @default(autoincrement())
+  username      String    @unique
+  email         String    @unique
+  passwordHash  String
+  avatarUrl     String?
+  createdAt     DateTime  @default(now())
+  lastLogin     DateTime?
+
+  // Relations
+  collections   UserCollection[]
+  comments      Comment[]
+}
+
+model UserCollection {
+  id        Int       @id @default(autoincrement())
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    Int
+  game      BoardGame @relation(fields: [gameId], references: [id], onDelete: Cascade)
+  gameId    Int
+  owned     Boolean   @default(false)
+  wishlist  Boolean   @default(false)
+  addedAt   DateTime  @default(now())
+
+  @@index([userId])
+  @@index([gameId])
+  @@index([owned])
+  @@index([wishlist])
+}
+
+model Comment {
+  id        Int      @id @default(autoincrement())
+  review    Review   @relation(fields: [reviewId], references: [id], onDelete: Cascade)
+  reviewId  Int
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    Int
+  content   String   @db.Text
+  createdAt DateTime @default(now())
+
+  @@index([reviewId])
+  @@index([userId])
+}
+
+model Tag {
+  id    Int       @id @default(autoincrement())
+  name  String    @unique
+
+  // Relations
+  games GameTag[]
+}
+
+model GameTag {
+  game    BoardGame @relation(fields: [gameId], references: [id], onDelete: Cascade)
+  gameId  Int
+  tag     Tag      @relation(fields: [tagId], references: [id], onDelete: Cascade)
+  tagId   Int
+
+  @@id([gameId, tagId])
+  @@index([tagId])
+}
