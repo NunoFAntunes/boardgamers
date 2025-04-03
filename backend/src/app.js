@@ -1,11 +1,14 @@
 const express = require('express');
+const cookieParser = require('cookie-parser');
 const boardGameRoutes = require('./board-game');
+const authRoutes = require('./auth');
 
 const app = express();
 
 // Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 
 // CORS middleware
 app.use((req, res, next) => {
@@ -16,6 +19,7 @@ app.use((req, res, next) => {
 });
 
 // Routes
+app.use('/api/auth', authRoutes);
 app.use('/api', boardGameRoutes);
 
 // Not found middleware

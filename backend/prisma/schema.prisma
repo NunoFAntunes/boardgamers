@@ -53,6 +53,10 @@ model Reviewer {
 
   // Relations
   reviewScores ReviewScore[]
+  account     Account?    @relation(fields: [accountId], references: [id])
+  accountId   Int?        @unique
+
+  @@index([accountId])
 }
 
 model Category {
@@ -140,6 +144,10 @@ model User {
   // Relations
   collections   UserCollection[]
   comments      Comment[]
+  account       Account?    @relation(fields: [accountId], references: [id])
+  accountId     Int?        @unique
+
+  @@index([accountId])
 }
 
 model UserCollection {
@@ -187,4 +195,27 @@ model GameTag {
 
   @@id([gameId, tagId])
   @@index([tagId])
+}
+
+model Account {
+  id            Int       @id @default(autoincrement())
+  email         String    @unique
+  passwordHash  String
+  role          Role      @default(USER)
+  refreshToken  String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  lastLogin     DateTime?
+
+  // Relations
+  user          User?
+  reviewer      Reviewer?
+
+  @@index([email])
+}
+
+enum Role {
+  USER
+  REVIEWER
+  ADMIN
 }
