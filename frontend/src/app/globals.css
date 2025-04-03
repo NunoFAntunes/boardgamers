@@ -70,3 +70,7 @@ body {
 .animate-dice-roll {
   animation: diceRoll 1s ease-in-out;
 }
+
+main {
+  padding-top: 3rem;
+}

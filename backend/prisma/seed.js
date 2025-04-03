@@ -8,6 +8,13 @@ async function main() {
   const accounts = await Promise.all([
     prisma.account.create({
       data: {
+        email: 'nuno@boardgamers.com',
+        passwordHash: await bcrypt.hash('password123', 10),
+        role: 'REVIEWER',
+      },
+    }),
+    prisma.account.create({
+      data: {
         email: 'alice@boardgamers.com',
         passwordHash: await bcrypt.hash('password123', 10),
         role: 'REVIEWER',
