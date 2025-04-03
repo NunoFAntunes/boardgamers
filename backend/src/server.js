@@ -1,9 +1,14 @@
+/**
+ * Main server entry point that starts the application
+ */
 const app = require('./app');
 
-const PORT = process.env.PORT || 3000;
+// Set default port to 3001 if not specified in environment
+const PORT = process.env.PORT || 3001;
 
 const server = app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
+  console.log(`API available at http://localhost:${PORT}/api`);
 });
 
 // Graceful shutdown

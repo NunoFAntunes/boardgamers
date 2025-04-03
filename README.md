@@ -1,3 +1,94 @@
+# Boardgamers
+
+A web application for board game reviews and ratings.
+
+## Environment Setup
+
+### Backend
+
+1. Navigate to the backend directory:
+   ```
+   cd backend
+   ```
+
+2. Create an `.env` file with the following configuration:
+   ```
+   # Server configuration
+   PORT=3001
+   FRONTEND_URL=http://localhost:3000
+
+   # JWT Secret Keys
+   JWT_SECRET=your-jwt-secret-key
+   JWT_REFRESH_SECRET=your-refresh-secret-key
+
+   # JWT Expiry Times
+   JWT_EXPIRES_IN=1h
+   JWT_REFRESH_EXPIRES_IN=7d
+
+   # Database configuration
+   DATABASE_URL="postgresql://username:password@localhost:5432/boardgamers?schema=public"
+   ```
+
+3. Install dependencies:
+   ```
+   npm install
+   ```
+
+4. Start the backend server:
+   ```
+   npm run dev
+   ```
+
+### Frontend
+
+1. Navigate to the frontend directory:
+   ```
+   cd frontend
+   ```
+
+2. Create an `.env.local` file with the following configuration:
+   ```
+   # API configuration
+   NEXT_PUBLIC_API_URL=http://localhost:3001/api
+   NEXT_PUBLIC_BACKEND_URL=http://localhost:3001
+   ```
+
+3. Install dependencies:
+   ```
+   npm install
+   ```
+
+4. Start the frontend development server:
+   ```
+   npm run dev
+   ```
+
+## Features
+
+- User authentication (login/register)
+- Browse board games
+- Read and write reviews
+- Special reviewer role with ability to create official reviews
+
+## Technologies
+
+- **Frontend**: Next.js, React, TypeScript, TailwindCSS
+- **Backend**: Node.js, Express, Prisma, PostgreSQL
+- **Authentication**: JWT
+
+## API Documentation
+
+### Authentication
+
+- `POST /api/auth/register` - Register a new user
+- `POST /api/auth/login` - Login a user
+- `POST /api/auth/logout` - Logout a user
+- `POST /api/auth/refresh-token` - Refresh JWT token
+
+## License
+
+MIT
+
 # Boardgamers Project
 
 A full-stack application for board game enthusiasts.
@@ -118,12 +209,14 @@ The backend follows a modular, feature-based organization:
 │   │   ├── reviewer-queries.js
 │   │   ├── reviewer-handlers.test.js
 │   │   ├── index.js
-│   ├── board-game
-│   │   ├── board-game-handlers.js
-│   │   ├── board-game-service.js
-│   │   ├── board-game-queries.js
-│   │   ├── board-game-handlers.test.js
-│   │   ├── index.js
+│   │   ├── board-game
+│   │   │   ├── board-game-handlers.js
+│   │   │   ├── board-game-service.js
+│   │   │   ├── board-game-queries.js
+│   │   │   ├── board-game-handlers.test.js
+│   │   │   ├── index.js
+│   │   │   └── ...
+│   │   └── ...
 ```
 
 Each module follows a layered architecture:
