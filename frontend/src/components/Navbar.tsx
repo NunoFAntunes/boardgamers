@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { useAuth } from '../utils/AuthContext';
 import LoginModal from './LoginModal';
+import Logo from './Logo';
 
 interface NavItem {
   name: string;
@@ -105,71 +106,68 @@ export default function Navbar() {
 
   return (
     <>
-      <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 z-50">
-        <div className="bg-black/20 backdrop-blur-lg px-4 py-2 rounded-full border border-white/10 shadow-lg flex items-center gap-3">
-          {filteredNavItems.map((item) => (
-            <div
-              key={item.name}
-              className="relative"
-              onMouseEnter={() => setHoveredItem(item.name)}
-              onMouseLeave={() => setHoveredItem(null)}
-            >
-              {item.name === 'Login' || item.name === 'Profile' ? (
-                <div 
-                  onClick={item.name === 'Login' ? handleLoginClick : undefined}
-                  className={`w-12 h-12 flex items-center justify-center rounded-full transition-all duration-300 cursor-pointer ${
-                    hoveredItem === item.name ? 'scale-125 bg-white/20' : 'hover:bg-white/10'
-                  }`}
-                >
-                  <div className="relative w-8 h-8">
-                    <span className="sr-only">{item.name}</span>
-                    {/* Custom styled icon representation */}
+      <div className="fixed top-0 left-0 right-0 z-50 bg-black/20 backdrop-blur-xl shadow-md border-b border-white/10">
+        <div className="max-w-screen-xl mx-auto px-4 h-12 flex items-center justify-between">
+          {/* Logo */}
+          <div className="flex-shrink-0">
+            <Logo size="small" withText={true} />
+          </div>
+          
+          {/* Navigation Items */}
+          <div className="flex items-center gap-2">
+            {filteredNavItems.map((item) => (
+              <div
+                key={item.name}
+                className="relative"
+                onMouseEnter={() => setHoveredItem(item.name)}
+                onMouseLeave={() => setHoveredItem(null)}
+              >
+                {item.name === 'Login' || item.name === 'Profile' ? (
+                  <div 
+                    onClick={item.name === 'Login' ? handleLoginClick : undefined}
+                    className={`flex items-center px-3 h-8 rounded-full text-white text-sm transition-all duration-200 ${
+                      hoveredItem === item.name ? 'bg-white/30' : 'hover:bg-white/10'
+                    }`}
+                  >
                     <div 
-                      className="w-8 h-8 flex items-center justify-center text-white font-bold text-sm rounded-lg"
+                      className="w-4 h-4 mr-1.5 rounded-full flex items-center justify-center"
                       style={{ backgroundColor: getIconColor(item.name) }}
-                    >
-                      {item.name.substring(0, 2).toUpperCase()}
-                    </div>
+                    ></div>
+                    {item.name}
+                    {item.name === 'Profile' && isLoggedIn && (
+                      <button 
+                        onClick={handleLogout} 
+                        className="ml-2 text-xs text-red-300 hover:text-red-200"
+                        aria-label="Logout"
+                      >
+                        (Logout)
+                      </button>
+                    )}
                   </div>
-                </div>
-              ) : (
-                <Link 
-                  href={item.href}
-                  className={`w-12 h-12 flex items-center justify-center rounded-full transition-all duration-300 ${
-                    hoveredItem === item.name ? 'scale-125 bg-white/20' : 'hover:bg-white/10'
-                  }`}
-                >
-                  <div className="relative w-8 h-8">
-                    <span className="sr-only">{item.name}</span>
-                    {/* Custom styled icon representation */}
+                ) : (
+                  <Link 
+                    href={item.href}
+                    className={`flex items-center px-3 h-8 rounded-full text-white text-sm transition-all duration-200 ${
+                      hoveredItem === item.name ? 'bg-white/30' : 'hover:bg-white/10'
+                    }`}
+                  >
                     <div 
-                      className="w-8 h-8 flex items-center justify-center text-white font-bold text-sm rounded-lg"
+                      className="w-4 h-4 mr-1.5 rounded-full flex items-center justify-center"
                       style={{ backgroundColor: getIconColor(item.name) }}
-                    >
-                      {item.name.substring(0, 2).toUpperCase()}
-                    </div>
-                  </div>
-                </Link>
-              )}
-              
-              {/* Tooltip */}
-              {hoveredItem === item.name && (
-                <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-1 bg-black/80 text-white text-sm rounded-lg whitespace-nowrap">
-                  {item.tooltip}
-                  {item.name === 'Profile' && isLoggedIn && (
-                    <button 
-                      onClick={handleLogout} 
-                      className="ml-2 text-xs text-red-400 hover:text-red-300"
-                    >
-                      (Logout)
-                    </button>
-                  )}
-                </div>
-              )}
-            </div>
-          ))}
+                    ></div>
+                    {item.name}
+                  </Link>
+                )}
+                
+                {/* Tooltip - removed as it's not needed with visible text */}
+              </div>
+            ))}
+          </div>
         </div>
       </div>
+
+      {/* Add spacing to prevent content from going under the navbar */}
+      <div className="h-12"></div>
 
       {/* Login Modal */}
       <LoginModal 
