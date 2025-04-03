@@ -134,6 +134,7 @@ model User {
   email         String    @unique
   passwordHash  String
   avatarUrl     String?
+  role          String    @default("USER")
   createdAt     DateTime  @default(now())
   lastLogin     DateTime?
 
